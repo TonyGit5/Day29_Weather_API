@@ -6,3 +6,8 @@ __pycache__
 *.png
 *.gif
 *.cred
+get_bainary.py
+index_tempalate.html
+index_copy.html
+web_gen.py
+/static
