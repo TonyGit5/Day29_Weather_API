@@ -14,11 +14,21 @@ unless it's being run itslef then __name__ == __main__
 '''
 app=Flask("__name__")
 
+stations = pd.read_csv('../data_sm/stations.txt', skiprows=17)
+stations = stations[["STAID","STANAME                                 ","CN"]].to_html()
+
 
 # http://127.0.0.1:5000/home
 @app.route("/")
 def home():
-    return render_template("home.html")
+
+    '''
+    stations gets sent to the html page in the return statement
+    you must have the 'safe' keyword to render the table in hte html template
+    this line goes in the html template
+    <p> {{stations|safe}}</p>
+    '''
+    return render_template("home.html", stations=stations)
 
 app.route("/api/v1/<word>")
 def word(word):
