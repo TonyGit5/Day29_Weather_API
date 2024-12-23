@@ -34,6 +34,36 @@ app.route("/api/v1/<word>")
 def word(word):
     return {"word": word}
 
+@app.route('/api/v1/<station>')
+def station_data(station):
+    filepath = Path('\\Users\\Tony\\GitHub\\data_sm\\')
+    station_id = str(station).zfill(6)
+    filename = (str(filepath) + '\\' + f"TG_STAID{station_id}.txt")
+    df = pd.read_csv(filename, skiprows=20, parse_dates=['    DATE'])
+    #celcius = df.loc[df['    DATE']]['   TG'].squeeze()/10
+    #farenheight = (celcius*9/5)+32
+    result = df.to_dict(orient='records')
+
+    return result
+    #return {"station": station,
+    #        "date": date,
+    #        "Temp. Celcius": celcius,
+    #       "Temp. Farenheight": farenheight}
+
+@app.route('/api/v1/annual/<station>/<year>')
+def station_year(station, year):
+    filepath = Path('\\Users\\Tony\\GitHub\\data_sm\\')
+    station_id = str(station).zfill(6)
+    filename = (str(filepath) + '\\' + f"TG_STAID{station_id}.txt")
+    df = pd.read_csv(filename, skiprows=20)
+    #celcius = df.loc[df['    DATE']]['   TG'].squeeze()/10
+    #farenheight = (celcius*9/5)+32
+    df['    DATE'] = df['    DATE'].astype(str)
+    result = df[df['    DATE'].str.startswith(str(year))].to_dict(orient='records')
+    print (result)
+   
+    return result
+
 @app.route("/api/v1/<station>/<date>")
 def about(station, date):
     filepath = Path('\\Users\\Tony\\GitHub\\data_sm\\')
